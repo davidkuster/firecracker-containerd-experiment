@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# https://docs.docker.com/engine/install/debian/
+
 set -e
 
 # Add Docker's official GPG key:
