@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e
+set -ex
 
 # note: this is the same as fc-install-debian.sh but just removing the first part of the script. For whatever reason the thin pool did not survive a reboot of the VM.
 
@@ -11,6 +11,11 @@ sudo mkdir -p /var/lib/firecracker-containerd/snapshotter/devmapper
 cd /var/lib/firecracker-containerd/snapshotter/devmapper
 DIR=/var/lib/firecracker-containerd/snapshotter/devmapper
 POOL=fc-dev-thinpool
+
+
+# added to the script - remove previous thin pool
+sudo dmsetup remove $POOL
+
 
 if [[ ! -f "${DIR}/data" ]]; then
     sudo touch "${DIR}/data"
