@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 ARCH="$(uname -m)"
 
 # Download a linux kernel binary

@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 TAP_DEV="tap0"
 TAP_IP="172.16.0.1"
 MASK_SHORT="/30"

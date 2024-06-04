@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 API_SOCKET="/tmp/firecracker.socket"
 
 # Remove API unix socket

@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 sudo mkdir /tmp/docker
 
 sudo systemctl stop docker

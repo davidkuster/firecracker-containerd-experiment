@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 ARCH="$(uname -m)"
 release_url="https://github.com/firecracker-microvm/firecracker/releases"
 latest=$(basename $(curl -fsSLI -o /dev/null -w  %{url_effective} ${release_url}/latest))

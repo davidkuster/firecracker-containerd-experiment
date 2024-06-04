@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 cd ~
 
 # Install git, Go 1.21, make, curl

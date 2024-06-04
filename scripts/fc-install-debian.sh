@@ -1,4 +1,7 @@
 #!/bin/bash
+
+set -e
+
 cd ~
 
 # Check out firecracker-containerd and build it.  This includes:
