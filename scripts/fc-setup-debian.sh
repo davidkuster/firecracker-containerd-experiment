@@ -6,12 +6,12 @@ cd ~
 
 # Install git, Go 1.21, make, curl
 sudo mkdir -p /etc/apt/sources.list.d
-echo "deb http://ftp.debian.org/debian bullseye-backports main" | \
-  sudo tee /etc/apt/sources.list.d/bullseye-backports.list
+echo "deb http://ftp.debian.org/debian bookworm-backports main" | \
+  sudo tee /etc/apt/sources.list.d/bookworm-backports.list
 sudo DEBIAN_FRONTEND=noninteractive apt-get update
 sudo DEBIAN_FRONTEND=noninteractive apt-get \
   install --yes \
-  golang-1.21 \
+  golang-1.21-go \
   make \
   git \
   curl \
@@ -22,6 +22,9 @@ sudo DEBIAN_FRONTEND=noninteractive apt-get \
 
 # Debian's Go 1.21 package installs "go" command under /usr/lib/go-1.21/bin
 export PATH=/usr/lib/go-1.21/bin:$PATH
+
+# manual fix for sudo
+sudo ln -s /usr/lib/go-1.21/bin/go /usr/bin/go
 
 cd ~
 
