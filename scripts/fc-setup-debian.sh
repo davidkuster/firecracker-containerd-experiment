@@ -44,3 +44,5 @@ sudo usermod -aG docker $(whoami)
 # Install device-mapper
 sudo DEBIAN_FRONTEND=noninteractive apt-get install -y dmsetup
 
+# reload the groups
+su - $(whoami)

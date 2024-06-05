@@ -37,3 +37,5 @@ sudo usermod -aG docker $(whoami)
 # Install device-mapper
 sudo apt install -y dmsetup
 
+# reload the groups
+su - $(whoami)

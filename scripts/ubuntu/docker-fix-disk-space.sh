@@ -4,21 +4,21 @@
 
 set -ex
 
-mkdir /tmp/docker
+sudo mkdir /tmp/docker
 
-systemctl stop docker
+sudo systemctl stop docker
 
 #systemctl status docker
 
-rsync -avxP /var/lib/docker /tmp/docker
+sudo rsync -avxP /var/lib/docker /tmp/docker
 
-mv /var/lib/docker /var/lib/docker.bkp
+sudo mv /var/lib/docker /var/lib/docker.bkp
 
-ln -s /tmp/docker /var/lib/docker
+sudo ln -s /tmp/docker /var/lib/docker
 
-systemctl start docker
+sudo systemctl start docker
 
 #systemctl status docker
 
 # TODO: add an if check here to ensure docker started successfully
-rm -r /var/lib/docker.bkp
+sudo rm -r /var/lib/docker.bkp
