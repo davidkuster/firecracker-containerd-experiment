@@ -1,21 +1,24 @@
 #!/bin/bash
 
-set -e
+# run this command with `sudo`
 
-sudo mkdir /tmp/docker
+set -ex
 
-sudo systemctl stop docker
+mkdir /tmp/docker
 
-sudo systemctl status docker
+systemctl stop docker
 
-sudo rsync -avxP /var/lib/docker /tmp/docker
+#systemctl status docker
 
-sudo mv /var/lib/docker /var/lib/docker.bkp
+rsync -avxP /var/lib/docker /tmp/docker
 
-sudo ln -s /tmp/docker /var/lib/docker
+mv /var/lib/docker /var/lib/docker.bkp
 
-sudo systemctl start docker
+ln -s /tmp/docker /var/lib/docker
 
-sudo systemctl status docker
+systemctl start docker
 
-echo "if runner execute: sudo rm -r /var/lib/docker.bkp"
+#systemctl status docker
+
+# TODO: add an if check here to ensure docker started successfully
+rm -r /var/lib/docker.bkp

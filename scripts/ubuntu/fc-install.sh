@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e
+set -ex
 
 cd ~
 
@@ -18,6 +18,7 @@ git clone https://github.com/firecracker-microvm/firecracker-containerd.git
 cd firecracker-containerd
 
 # NOTE: this command having problems, can't find go binary (might be fixed by 'ln -s' in setup script)
+# UPDATE: prompting for a username for the docker group, but Docker isn't installed yet
 sg docker -c 'make all image firecracker'
 # instead doing it as the normal ubuntu user instead of in the docker group
 #make all image firecracker

@@ -22,7 +22,7 @@ sudo apt install -y \
 # Ubuntu's Go 1.21 package installs "go" command under /usr/lib/go-1.21/bin
 export PATH=/usr/lib/go-1.21/bin:$PATH
 
-# manual fix for sudo
+# manual fix for sudo commands not seeing go on the path
 sudo ln -s /usr/lib/go-1.21/bin/go /usr/bin/go
 
 cd ~

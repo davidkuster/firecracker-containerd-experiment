@@ -29,10 +29,8 @@ Starting from a fresh VM.
 1. Set nested virtualization (`VBoxManage modifyvm <vm-name> --nested-hw-virt on`)
 1. Restart VM
 1. Add user to sudoers
-    1. `su -`
-    1. `visudo -f /etc/sudoers`
+    1. `sudo visudo -f /etc/sudoers`
     1. add `<user> ALL=(ALL:ALL) ALL)` under the similar line for `root`
-    1. `exit` to quit root shell
 1. Fix sources list for apt/apt-get
     1. Comment out the exising `deb cdrom ...` line
     1. Add the example values [here](https://wiki.debian.org/SourcesList):
@@ -51,8 +49,8 @@ Starting from a fresh VM.
 1. Clone this repo
     1. `git clone https://github.com/davidkuster/firecracker-containerd-experiment`
 1. Follow the firecracker-containerd [getting started](https://github.com/firecracker-microvm/firecracker-containerd/blob/main/docs/getting-started.md) instructions, included in this repo as slightly tweaked scripts:
-    1. Run [fc-setup-debian.sh](scripts/fc-setup-debian.sh)
-    1. Run [fc-install-debian.sh](scripts/fc-install-debian.sh)
+    1. Run [scripts/fc-setup-debian.sh](scripts/fc-setup-debian.sh)
+    1. Run [scripts/fc-install-debian.sh](scripts/fc-install-debian.sh)
         - this command especially will dump out a ton of logs
         - it may complain `device-mapper: reload iotcl on fc-dev-thinpool  failed: No such device or address` but this can be ignored if the `firecracker-runtime.json` output is shown in the next step
 1. Start firecracker-containerd (getting started step 5)
@@ -77,6 +75,8 @@ Starting from a fresh VM.
     ```
     This fails:
     > ctr: failed to start shim: start failed: aws.firecracker: unexpected error from CreateVM: rpc error: code = Unknown desc = failed to create VM: failed to start the VM: Put "http://localhost/actions": EOF: exit status 1: unknown
+
+    See [logs section](#logs)
 
 ### Random
 
@@ -118,10 +118,29 @@ But, it's also been this way in Firecracker since 5 Aug 2020 with the [v0.22.0 r
 
 ### Ubuntu
 
-Starting fresh from a live USB.
+Starting fresh from an Ubuntu 22.04 (Jammy Jellyfish) live USB.
 
 1. `sudo apt-get update`
-1. `sudo apt-get install -y git`
+1. Manually install git (to clone this repo with the scripts)
+    1. `sudo apt-get install -y git`
+1. Clone this repo
+    1. `git clone https://github.com/davidkuster/firecracker-containerd-experiment`
+1. Follow the firecracker-containerd [getting started](https://github.com/firecracker-microvm/firecracker-containerd/blob/main/docs/getting-started.md) instructions, included in this repo as slightly tweaked scripts:
+    1. Run [scripts/ubuntu/fc-setup.sh](scripts/ubuntu/fc-setup.sh)
+    1. Run sudo [scripts/ubuntu/docker-fix-disk-space.sh](scripts/ubuntu/docker-fix-disk-space.sh) (preemptively fix Docker disk space issues)
+    1. Run sudo [scripts/ubuntu/fc-install.sh](scripts/ubuntu/fc-install.sh)
+        - note the `sudo` here so that the Docker commands will work
+        - current status
+            - [this command](https://github.com/firecracker-microvm/firecracker-containerd/blob/main/tools/image-builder/Makefile#L46-L55) in the `tools/image-builder/Makefile` returns an error:
+            ```bash
+            debootstrap --variant=minbase --include=udev,systemd,systemd-sysv,procps,libseccomp2,haveged bullseye "tmp/rootfs" http://deb.debian.org/debian
+            /usr/sbin/debootstrap: 1723: cannot create /src/tmp/rootfs/test-dev-null: Permission denied
+            E: Cannot install into target '/src/tmp/rootfs' mounted with noexec or nodev
+            make: *** [Makefile:81: debootstrap_stamp] Error 1
+            make[1]: *** [Makefile:119: all-in-docker] Error 2
+            make[1]: Leaving directory '/root/firecracker-containerd/tools/image-builder'
+            make: *** [Makefile:166: image] Error 2
+            ```
 
 
 ## References
