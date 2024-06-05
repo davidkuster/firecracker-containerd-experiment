@@ -59,8 +59,8 @@ Starting from a fresh VM.
     1. `egrep "svm|vmx" /proc/cpuinfo`
     1. `sudo kvm-ok` (install via `sudo apt-get install cpu-checker`)
 1. Follow the firecracker-containerd [getting started](https://github.com/firecracker-microvm/firecracker-containerd/blob/main/docs/getting-started.md) instructions, included in this repo as slightly tweaked scripts:
-    1. Run [scripts/fc-setup-debian.sh](scripts/fc-setup-debian.sh)
-    1. Run [scripts/fc-install-debian.sh](scripts/fc-install-debian.sh)
+    1. Run [scripts/debian/fc-setup.sh](scripts/debian/fc-setup.sh)
+    1. Run [scripts/debian/fc-install.sh](scripts/debian/fc-install.sh)
         - this command especially will dump out a ton of logs
         - it may complain `device-mapper: reload iotcl on fc-dev-thinpool  failed: No such device or address` but this can be ignored if the `firecracker-runtime.json` output is shown in the next step
 1. Start firecracker-containerd (getting started step 5)
