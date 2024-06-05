@@ -12,6 +12,9 @@ Running both Ubuntu 22.04 (Jammy Jellyfish) from a live USB disk and Debian 12 (
 
 ### Debian
 
+> Update: doing this in VirtualBox may be a red herring, and turning on nested virtualization presumably doesn't work as expected. [kvm-ok](https://manpages.debian.org/bookworm/cpu-checker/kvm-ok.1.en.html) did not fail to install - it can only be run as root. Running `sudo kvm-ok` on my VM now reports the following: `INFO: Your CPU does not support KVM extensions. KVM acceleration can NOT be used.` Unfortunately the error message from firecracker-containerd in this situation is just "unknown" instead of something useful. (And, `lsmod | grep kvm` is an even easier quick verification before starting.)
+
+
 Starting from a fresh VM.
 
 1. Create VM in VirtualBox, using [debian-12.5.0-amd64-DVD-1.iso](https://cdimage.debian.org/debian-cd/current/amd64/iso-dvd/) (and validate the sha)
@@ -109,8 +112,9 @@ Trying to see in the logs what's happening with the unknown error above. But it 
 
 But, it's also been this way in Firecracker since 5 Aug 2020 with the [v0.22.0 release](https://github.com/firecracker-microvm/firecracker/releases/tag/v0.22.0). Is the firecracker-containerd quickstart that out of date?
 
+
 ## References
 
-- [Getting Started with Firecracker](https://medium.com/better-programming/getting-started-with-firecracker-a88495d656d9)
 - firecracker-containerd [quickstart](https://github.com/firecracker-microvm/firecracker-containerd/blob/main/docs/quickstart.md)
 - firecracker-containerd [getting started](https://github.com/firecracker-microvm/firecracker-containerd/blob/main/docs/getting-started.md)
+- [Getting Started with Firecracker](https://medium.com/better-programming/getting-started-with-firecracker-a88495d656d9)
