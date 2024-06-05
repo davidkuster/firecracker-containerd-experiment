@@ -9,6 +9,9 @@ Use FirecrackerVM / firecracker-containerd as an isolation wrapper around Docker
 
 Running both Ubuntu 22.04 (Jammy Jellyfish) from a live USB disk and Debian 12 (bookworm) in VirtualBox on a Mac. Initially started with Ubuntu because I'm more familiar with it but the [firecracker-containerd quickstart](https://github.com/firecracker-microvm/firecracker-containerd/blob/main/docs/quickstart.md) is Debian-oriented so I may be swimming against the tide with Ubuntu.
 
+- [Debian](#debian)
+- [Ubuntu](#ubuntu)
+
 
 ### Debian
 
@@ -113,8 +116,17 @@ Trying to see in the logs what's happening with the unknown error above. But it 
 But, it's also been this way in Firecracker since 5 Aug 2020 with the [v0.22.0 release](https://github.com/firecracker-microvm/firecracker/releases/tag/v0.22.0). Is the firecracker-containerd quickstart that out of date?
 
 
+### Ubuntu
+
+Starting fresh from a live USB.
+
+1. `sudo apt-get update`
+1. `sudo apt-get install -y git`
+
+
 ## References
 
 - firecracker-containerd [quickstart](https://github.com/firecracker-microvm/firecracker-containerd/blob/main/docs/quickstart.md)
 - firecracker-containerd [getting started](https://github.com/firecracker-microvm/firecracker-containerd/blob/main/docs/getting-started.md)
 - [Getting Started with Firecracker](https://medium.com/better-programming/getting-started-with-firecracker-a88495d656d9)
+- firecracker-containerd [issue](https://github.com/firecracker-microvm/firecracker-containerd/issues/472) on quickstart and Ubuntu

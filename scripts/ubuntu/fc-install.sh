@@ -17,10 +17,10 @@ cd ~
 git clone https://github.com/firecracker-microvm/firecracker-containerd.git
 cd firecracker-containerd
 
-# NOTE: this command having problems, can find go binary
-#sg docker -c 'make all image firecracker'
+# NOTE: this command having problems, can't find go binary (might be fixed by 'ln -s' in setup script)
+sg docker -c 'make all image firecracker'
 # instead doing it as the normal ubuntu user instead of in the docker group
-make all image firecracker
+#make all image firecracker
 
 sudo make install install-firecracker demo-network
 
@@ -105,9 +105,10 @@ sudo tee /etc/containerd/firecracker-runtime.json <<EOF
 {
   "firecracker_binary_path": "/usr/local/bin/firecracker",
   "cpu_template": "T2",
-  "log_fifo": "fc-logs.fifo",
-  "log_levels": ["debug"],
-  "metrics_fifo": "fc-metrics.fifo",
+  "log_path": "/tmp/fc-logs.fifo",
+  "level": "Debug",
+  "show_level": true,
+  "metrics_path": "/tmp/fc-metrics.fifo",
   "kernel_args": "console=ttyS0 noapic reboot=k panic=1 pci=off nomodules ro systemd.unified_cgroup_hierarchy=0 systemd.journald.forward_to_console systemd.unit=firecracker.target init=/sbin/overlay-init",
   "default_network_interfaces": [{
     "CNIConfig": {
