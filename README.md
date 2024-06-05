@@ -17,6 +17,9 @@ Running both Ubuntu 22.04 (Jammy Jellyfish) from a live USB disk and Debian 12 (
 
 > Update: doing this in VirtualBox may be a red herring, and turning on nested virtualization presumably doesn't work as expected. [kvm-ok](https://manpages.debian.org/bookworm/cpu-checker/kvm-ok.1.en.html) did not fail to install - it can only be run as root. Running `sudo kvm-ok` on my VM now reports the following: `INFO: Your CPU does not support KVM extensions. KVM acceleration can NOT be used.` Unfortunately the error message from firecracker-containerd in this situation is just "unknown" instead of something useful. (And, `lsmod | grep kvm` is an even easier quick verification before starting.)
 
+> Update2: VirtualBox [doc](https://docs.oracle.com/en/virtualization/virtualbox/7.0/user/AdvancedTopics.html) indicates this should work:
+>> Oracle VM VirtualBox supports nested virtualization. This feature enables the passthrough of hardware virtualization functions to the guest VM. That means that you can install a hypervisor, such as Oracle VM VirtualBox, Oracle VM Server or KVM, on an Oracle VM VirtualBox guest. You can then create and run VMs within the guest VM.
+
 
 Starting from a fresh VM.
 
@@ -28,6 +31,10 @@ Starting from a fresh VM.
 1. Shut down VM
 1. Set nested virtualization (`VBoxManage modifyvm <vm-name> --nested-hw-virt on`)
 1. Restart VM
+1. Verify KVM virtualization is available via any of:
+    1. `lsmod | grep kvm`
+    1. `egrep "svm|vmx" /proc/cpuinfo`
+    1. `sudo kvm-ok` (install via `sudo apt-get install cpu-checker`)
 1. Add user to sudoers
     1. `sudo visudo -f /etc/sudoers`
     1. add `<user> ALL=(ALL:ALL) ALL)` under the similar line for `root`
@@ -76,7 +83,7 @@ Starting from a fresh VM.
     This fails:
     > ctr: failed to start shim: start failed: aws.firecracker: unexpected error from CreateVM: rpc error: code = Unknown desc = failed to create VM: failed to start the VM: Put "http://localhost/actions": EOF: exit status 1: unknown
 
-    See [logs section](#logs)
+    See [logs section](#logs) for a (so far unsuccessful) attempt to get more information about this error.
 
 ### Random
 
