@@ -28,13 +28,6 @@ Starting from a fresh VM.
     1. select `Guest Additions`
     1. allocate 8GB RAM, 4 CPUs
     1. set disk space to 50GB (but don't pre-allocate)
-1. Shut down VM
-1. Set nested virtualization (`VBoxManage modifyvm <vm-name> --nested-hw-virt on`)
-1. Restart VM
-1. Verify KVM virtualization is available via any of:
-    1. `lsmod | grep kvm`
-    1. `egrep "svm|vmx" /proc/cpuinfo`
-    1. `sudo kvm-ok` (install via `sudo apt-get install cpu-checker`)
 1. Add user to sudoers
     1. `sudo visudo -f /etc/sudoers`
     1. add `<user> ALL=(ALL:ALL) ALL)` under the similar line for `root`
@@ -55,6 +48,16 @@ Starting from a fresh VM.
     1. `sudo apt-get install -y git`
 1. Clone this repo
     1. `git clone https://github.com/davidkuster/firecracker-containerd-experiment`
+1. Install [KVM](https://wiki.debian.org/KVM)
+    1. Run [scripts/debian/kvm-install.sh](scripts/debian/kvm-install.sh)
+    1. _TBD if this is needed_
+1. Shut down VM
+1. Set nested virtualization (`VBoxManage modifyvm <vm-name> --nested-hw-virt on`)
+1. Restart VM
+1. Verify KVM virtualization is available via any of:
+    1. `lsmod | grep kvm`
+    1. `egrep "svm|vmx" /proc/cpuinfo`
+    1. `sudo kvm-ok` (install via `sudo apt-get install cpu-checker`)
 1. Follow the firecracker-containerd [getting started](https://github.com/firecracker-microvm/firecracker-containerd/blob/main/docs/getting-started.md) instructions, included in this repo as slightly tweaked scripts:
     1. Run [scripts/fc-setup-debian.sh](scripts/fc-setup-debian.sh)
     1. Run [scripts/fc-install-debian.sh](scripts/fc-install-debian.sh)
@@ -134,8 +137,8 @@ Starting fresh from an Ubuntu 22.04 (Jammy Jellyfish) live USB.
     1. `git clone https://github.com/davidkuster/firecracker-containerd-experiment`
 1. Follow the firecracker-containerd [getting started](https://github.com/firecracker-microvm/firecracker-containerd/blob/main/docs/getting-started.md) instructions, included in this repo as slightly tweaked scripts:
     1. Run [scripts/ubuntu/fc-setup.sh](scripts/ubuntu/fc-setup.sh)
-    1. Run sudo [scripts/ubuntu/docker-fix-disk-space.sh](scripts/ubuntu/docker-fix-disk-space.sh) (preemptively fix Docker disk space issues)
-    1. Run sudo [scripts/ubuntu/fc-install.sh](scripts/ubuntu/fc-install.sh)
+    1. Run [scripts/ubuntu/docker-fix-disk-space.sh](scripts/ubuntu/docker-fix-disk-space.sh) (preemptively fix Docker disk space issues)
+    1. Run "sudo [scripts/ubuntu/fc-install.sh](scripts/ubuntu/fc-install.sh)"
         - note the `sudo` here so that the Docker commands will work
         - current status
             - [this command](https://github.com/firecracker-microvm/firecracker-containerd/blob/main/tools/image-builder/Makefile#L46-L55) in the `tools/image-builder/Makefile` returns an error:
