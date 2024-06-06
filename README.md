@@ -7,19 +7,54 @@ Use FirecrackerVM / firecracker-containerd as an isolation wrapper around Docker
 
 ## Experiment notes
 
-Running both Ubuntu 22.04 (Jammy Jellyfish) from a live USB disk and Debian 12 (bookworm) in VirtualBox on a Mac. Initially started with Ubuntu because I'm more familiar with it but the [firecracker-containerd quickstart](https://github.com/firecracker-microvm/firecracker-containerd/blob/main/docs/quickstart.md) is Debian-oriented so I may be swimming against the tide with Ubuntu.
+Running both Ubuntu 22.04 (Jammy Jellyfish) from a live USB disk and Debian 12 (bookworm) in VirtualBox on a Mac (and then a live USB as well). Initially started with Ubuntu because I'm more familiar with it but the [firecracker-containerd quickstart](https://github.com/firecracker-microvm/firecracker-containerd/blob/main/docs/quickstart.md) is Debian-oriented so I may be swimming against the tide with Ubuntu.
 
-- [Debian](#debian)
-- [Ubuntu](#ubuntu)
+<!-- MarkdownTOC autolink="true" -->
+
+- [Debian \(live USB\)](#debian-live-usb)
+- [Debian \(in VirtualBox\)](#debian-in-virtualbox)
+- [Random](#random)
+    - [DNS](#dns)
+    - [Logs](#logs)
+- [Ubuntu \(live USB\)](#ubuntu-live-usb)
+- [References](#references)
+
+<!-- /MarkdownTOC -->
 
 
-### Debian
+### Debian (live USB)
 
-> Update: doing this in VirtualBox may be a red herring, and turning on nested virtualization presumably doesn't work as expected. [kvm-ok](https://manpages.debian.org/bookworm/cpu-checker/kvm-ok.1.en.html) did not fail to install - it can only be run as root. Running `sudo kvm-ok` on my VM now reports the following: `INFO: Your CPU does not support KVM extensions. KVM acceleration can NOT be used.` Unfortunately the error message from firecracker-containerd in this situation is just "unknown" instead of something useful. (And, `lsmod | grep kvm` is an even easier quick verification before starting.)
+Starting fresh from a Debian 12 (bookworm) live USB.
 
-> Update2: VirtualBox [doc](https://docs.oracle.com/en/virtualization/virtualbox/7.0/user/AdvancedTopics.html) indicates this should work:
+1. `sudo apt-get update`
+1. Clone this repo (git is already installed)
+    1. `git clone https://github.com/davidkuster/firecracker-containerd-experiment`
+1. Follow the firecracker-containerd [getting started](https://github.com/firecracker-microvm/firecracker-containerd/blob/main/docs/getting-started.md) instructions, included in this repo as slightly tweaked scripts:
+    1. `scripts/ubuntu/fc-setup.sh` ([source](scripts/ubuntu/fc-setup.sh))
+    1. `scripts/docker-fix-disk-space.sh` ([source](scripts/ubuntu/docker-fix-disk-space.sh)) (preemptively fix Docker disk space issues)
+    1. `sudo scripts/ubuntu/fc-install.sh` ([source](scripts/ubuntu/fc-install.sh))
+        - note the `sudo` here so that the Docker commands will work
+        - current status
+            - [this command](https://github.com/firecracker-microvm/firecracker-containerd/blob/main/tools/image-builder/Makefile#L46-L55) in the `tools/image-builder/Makefile` returns an error:
+            ```bash
+            debootstrap --variant=minbase --include=udev,systemd,systemd-sysv,procps,libseccomp2,haveged bullseye "tmp/rootfs" http://deb.debian.org/debian
+            /usr/sbin/debootstrap: 1723: cannot create /src/tmp/rootfs/test-dev-null: Permission denied
+            E: Cannot install into target '/src/tmp/rootfs' mounted with noexec or nodev
+            make: *** [Makefile:81: debootstrap_stamp] Error 1
+            make[1]: *** [Makefile:119: all-in-docker] Error 2
+            make[1]: Leaving directory '/root/firecracker-containerd/tools/image-builder'
+            make: *** [Makefile:166: image] Error 2
+            ```
+
+> Note: this is the same error as in the Ubuntu attempt [below](#ubuntu-live-usb).
+
+
+### Debian (in VirtualBox)
+
+> TL;DR - this isn't working for me, due to virtualization issues. VirtualBox [doc](https://docs.oracle.com/en/virtualization/virtualbox/7.0/user/AdvancedTopics.html) indicates this should work:
 >> Oracle VM VirtualBox supports nested virtualization. This feature enables the passthrough of hardware virtualization functions to the guest VM. That means that you can install a hypervisor, such as Oracle VM VirtualBox, Oracle VM Server or KVM, on an Oracle VM VirtualBox guest. You can then create and run VMs within the guest VM.
-
+>
+> However, when running [kvm-ok](https://manpages.debian.org/bookworm/cpu-checker/kvm-ok.1.en.html) it's reporting KVM virtualization is not available, even though the Intel processor in my Mac [should support it](https://ark.intel.com/content/www/us/en/ark/products/191046/intel-core-i7-9750hf-processor-12m-cache-up-to-4-50-ghz.html).
 
 Starting from a fresh VM.
 
@@ -44,23 +79,22 @@ Starting from a fresh VM.
     deb http://deb.debian.org/debian bookworm-updates main non-free-firmware
     deb-src http://deb.debian.org/debian bookworm-updates main non-free-firmware
     ````
-1. Manually install git (to clone this repo with the scripts)
-    1. `sudo apt-get install -y git`
-1. Clone this repo
-    1. `git clone https://github.com/davidkuster/firecracker-containerd-experiment`
-1. Install [KVM](https://wiki.debian.org/KVM)
-    1. Run [scripts/debian/kvm-install.sh](scripts/debian/kvm-install.sh)
-    1. _TBD if this is needed_
-1. Shut down VM
-1. Set nested virtualization (`VBoxManage modifyvm <vm-name> --nested-hw-virt on`)
-1. Restart VM
+1. Set nested virtualization config in VirtualBox
+    1. Shut down VM
+    1. `VBoxManage modifyvm <vm-name> --nested-hw-virt on`
+    1. Restart VM
 1. Verify KVM virtualization is available via any of:
     1. `lsmod | grep kvm`
     1. `egrep "svm|vmx" /proc/cpuinfo`
     1. `sudo kvm-ok` (install via `sudo apt-get install cpu-checker`)
-1. Follow the firecracker-containerd [getting started](https://github.com/firecracker-microvm/firecracker-containerd/blob/main/docs/getting-started.md) instructions, included in this repo as slightly tweaked scripts:
-    1. Run [scripts/debian/fc-setup.sh](scripts/debian/fc-setup.sh)
-    1. Run [scripts/debian/fc-install.sh](scripts/debian/fc-install.sh)
+1. Manually install git (to clone this repo with the scripts)
+    1. `sudo apt-get install -y git`
+1. Clone this repo
+    1. `git clone https://github.com/davidkuster/firecracker-containerd-experiment`
+1. Run these scripts (slightly tweaked versions of the firecracker-containerd [getting started](https://github.com/firecracker-microvm/firecracker-containerd/blob/main/docs/getting-started.md) instructions):
+    1. `scripts/debian/fc-setup.sh` ([source](scripts/debian/fc-setup.sh))
+    1. `scripts/docker-fix-disk-space.sh` ([source](scripts/ubuntu/docker-fix-disk-space.sh)) (preemptively fix Docker disk space issues)
+    1. `scripts/debian/fc-install.sh` ([source](scripts/debian/fc-install.sh))
         - this command especially will dump out a ton of logs
         - it may complain `device-mapper: reload iotcl on fc-dev-thinpool  failed: No such device or address` but this can be ignored if the `firecracker-runtime.json` output is shown in the next step
 1. Start firecracker-containerd (getting started step 5)
@@ -126,7 +160,7 @@ Trying to see in the logs what's happening with the unknown error above. But it 
 But, it's also been this way in Firecracker since 5 Aug 2020 with the [v0.22.0 release](https://github.com/firecracker-microvm/firecracker/releases/tag/v0.22.0). Is the firecracker-containerd quickstart that out of date?
 
 
-### Ubuntu
+### Ubuntu (live USB)
 
 Starting fresh from an Ubuntu 22.04 (Jammy Jellyfish) live USB.
 
@@ -136,9 +170,9 @@ Starting fresh from an Ubuntu 22.04 (Jammy Jellyfish) live USB.
 1. Clone this repo
     1. `git clone https://github.com/davidkuster/firecracker-containerd-experiment`
 1. Follow the firecracker-containerd [getting started](https://github.com/firecracker-microvm/firecracker-containerd/blob/main/docs/getting-started.md) instructions, included in this repo as slightly tweaked scripts:
-    1. Run [scripts/ubuntu/fc-setup.sh](scripts/ubuntu/fc-setup.sh)
-    1. Run [scripts/ubuntu/docker-fix-disk-space.sh](scripts/ubuntu/docker-fix-disk-space.sh) (preemptively fix Docker disk space issues)
-    1. Run "sudo [scripts/ubuntu/fc-install.sh](scripts/ubuntu/fc-install.sh)"
+    1. `scripts/ubuntu/fc-setup.sh` ([source](scripts/ubuntu/fc-setup.sh))
+    1. `scripts/docker-fix-disk-space.sh` ([source](scripts/ubuntu/docker-fix-disk-space.sh)) (preemptively fix Docker disk space issues)
+    1. `sudo scripts/ubuntu/fc-install.sh` ([source](scripts/ubuntu/fc-install.sh))
         - note the `sudo` here so that the Docker commands will work
         - current status
             - [this command](https://github.com/firecracker-microvm/firecracker-containerd/blob/main/tools/image-builder/Makefile#L46-L55) in the `tools/image-builder/Makefile` returns an error:
