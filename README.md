@@ -34,7 +34,18 @@ Starting fresh from a Debian 11 (bullseye) live USB.
 4. `scripts/debian/fc-setup.sh` ([source](scripts/debian/fc-setup.sh))
 5. `sudo scripts/debian/fc-install.sh` ([source](scripts/debian/fc-install.sh))
 6. Wait for it to run out of disk space, then run `sudo scripts/docker-fix-disk-space.sh` ([source](scripts/docker-fix-disk-space.sh))
-8. Rerun `sudo scripts/debian/fc-install.sh`
+7. Rerun `sudo scripts/debian/fc-install.sh`
+    - same error
+        ```bash
+        mkdir tmp/rootfs
+        debootstrap --variant=minbase --include=udev,systemd,systemd-sysv,procps,libseccomp2,haveged bullseye "tmp/rootfs" http://deb.debian.org/debian
+        /usr/sbin/debootstrap: 1723: cannot create /src/tmp/rootfs/test-dev-null: Permission denied
+        E: Cannot install into target '/src/tmp/rootfs' mounted with noexec or nodev
+        make: *** [Makefile:81: debootstrap_stamp] Error 1
+        make[1]: *** [Makefile:119: all-in-docker] Error 2
+        make[1]: Leaving directory '/root/firecracker-containerd/tools/image-builder'
+        make: *** [Makefile:166: image] Error 2
+        ```
 
 ### Debian 12 (live USB)
 
@@ -44,9 +55,9 @@ Starting fresh from a Debian 12 (bookworm) live USB.
 1. Clone this repo (git is already installed)
     1. `git clone https://github.com/davidkuster/firecracker-containerd-experiment`
 1. Follow the firecracker-containerd [getting started](https://github.com/firecracker-microvm/firecracker-containerd/blob/main/docs/getting-started.md) instructions, included in this repo as slightly tweaked scripts:
-    1. `scripts/ubuntu/fc-setup.sh` ([source](scripts/ubuntu/fc-setup.sh))
-    1. `scripts/docker-fix-disk-space.sh` ([source](scripts/ubuntu/docker-fix-disk-space.sh)) (preemptively fix Docker disk space issues)
-    1. `sudo scripts/ubuntu/fc-install.sh` ([source](scripts/ubuntu/fc-install.sh))
+    1. `scripts/debian/fc-setup.sh` ([source](scripts/debian/fc-setup.sh))
+    1. `scripts/docker-fix-disk-space.sh` ([source](scripts/docker-fix-disk-space.sh)) (preemptively fix Docker disk space issues)
+    1. `sudo scripts/debian/fc-install.sh` ([source](scripts/debian/fc-install.sh))
         - note the `sudo` here so that the Docker commands will work
         - current status
             - [this command](https://github.com/firecracker-microvm/firecracker-containerd/blob/main/tools/image-builder/Makefile#L46-L55) in the `tools/image-builder/Makefile` returns an error:
