@@ -4,7 +4,7 @@
 
 set -ex
 
-sudo mkdir /tmp/docker
+sudo mkdir -p /tmp/docker
 
 sudo systemctl stop docker
 
