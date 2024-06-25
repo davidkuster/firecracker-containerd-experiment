@@ -32,8 +32,9 @@ Starting fresh from a Debian 11 (bullseye) live USB.
 2. `sudo apt install git`
 3. `git clone https://github.com/davidkuster/firecracker-containerd-experiment`
 4. `scripts/debian/fc-setup.sh` ([source](scripts/debian/fc-setup.sh))
-5. `scripts/debian/docker-fix-disk-space-debian-11.sh` ([source](scripts/debian/docker-fix-disk-space-debian-11.sh))
-6. `sudo scripts/debian/fc-install.sh` ([source](scripts/debian/fc-install.sh))
+5. `sudo scripts/debian/fc-install.sh` ([source](scripts/debian/fc-install.sh))
+6. Wait for it to run out of disk space, then run `sudo scripts/docker-fix-disk-space.sh` ([source](scripts/docker-fix-disk-space.sh))
+8. Rerun `sudo scripts/debian/fc-install.sh`
 
 ### Debian 12 (live USB)
 
