@@ -11,7 +11,8 @@ Running both Ubuntu 22.04 (Jammy Jellyfish) from a live USB disk and Debian 12 (
 
 <!-- MarkdownTOC autolink="true" -->
 
-- [Debian \(live USB\)](#debian-live-usb)
+- [Debian 11 \(live USB\)](#debian-11-live-usb)
+- [Debian 12 \(live USB\)](#debian-12-live-usb)
 - [Debian \(in VirtualBox\)](#debian-in-virtualbox)
 - [Random](#random)
     - [DNS](#dns)
@@ -21,8 +22,20 @@ Running both Ubuntu 22.04 (Jammy Jellyfish) from a live USB disk and Debian 12 (
 
 <!-- /MarkdownTOC -->
 
+### Debian 11 (live USB)
 
-### Debian (live USB)
+Starting fresh from a Debian 11 (bullseye) live USB.
+
+> Note wifi does not work by default with Debian 11. I dug out a network cable.
+
+1. `sudo apt update`
+2. `sudo apt install git`
+3. `git clone https://github.com/davidkuster/firecracker-containerd-experiment`
+4. `scripts/debian/fc-setup.sh` ([source](scripts/debian/fc-setup.sh))
+5. `scripts/debian/docker-fix-disk-space-debian-11.sh` ([source](scripts/debian/docker-fix-disk-space-debian-11.sh))
+6. `sudo scripts/debian/fc-install.sh` ([source](scripts/debian/fc-install.sh))
+
+### Debian 12 (live USB)
 
 Starting fresh from a Debian 12 (bookworm) live USB.
 
