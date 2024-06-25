@@ -37,6 +37,14 @@ Starting fresh from a Debian 11 (bullseye) live USB.
 7. Rerun `sudo scripts/debian/fc-install.sh`
     - same error
         ```bash
+        docker run --rm \
+        	--security-opt=apparmor=unconfined \
+        	--volume /home/user/firecracker-containerd/tools/image-builder:/src \
+        	--volume /src/tmp \
+        	--cap-add=sys_admin \
+        	--cap-add=sys_chroot \
+        	--env=DEBMIRROR \
+	        fc-image-builder:latest all
         mkdir tmp/rootfs
         debootstrap --variant=minbase --include=udev,systemd,systemd-sysv,procps,libseccomp2,haveged bullseye "tmp/rootfs" http://deb.debian.org/debian
         /usr/sbin/debootstrap: 1723: cannot create /src/tmp/rootfs/test-dev-null: Permission denied
