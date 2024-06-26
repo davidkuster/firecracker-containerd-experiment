@@ -97,10 +97,11 @@ Starting from a fresh VM.
     1. allocate 8GB RAM, 4 CPUs
     1. set disk space to 50GB (but don't pre-allocate)
 1. Add user to sudoers
-    1. `sudo visudo -f /etc/sudoers`
-    1. add `<user> ALL=(ALL:ALL) ALL)` under the similar line for `root`
+    1. `sudo visudo -f /etc/sudoers` or `su -` then `visudo -f /etc/sudoers`
+    1. add `<user> ALL=(ALL:ALL) ALL` under the similar line for `root`
 1. Fix sources list for apt/apt-get
-    1. Comment out the exising `deb cdrom ...` line
+    1. `vi /etc/apt/sources.list`
+    1. Comment out the exising line:  `# deb cdrom ...`
     1. Add the example values [here](https://wiki.debian.org/SourcesList):
     ```
     deb http://deb.debian.org/debian bookworm main non-free-firmware
