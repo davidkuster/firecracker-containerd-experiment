@@ -73,7 +73,7 @@ fi
 cd ~/firecracker-containerd-experiment
 
 sudo mkdir -p /var/lib/firecracker-containerd/runtime
-sudo cp bin/fire* /usr/local/bin
+sudo cp bin/*fire* /usr/local/bin
 sudo cp bin/rootfs.img /var/lib/firecracker-containerd/runtime/default-rootfs.img
 sudo cp ~/hello-vmlinux.bin /var/lib/firecracker-containerd/runtime/default-vmlinux.bin
 sudo mkdir -p /etc/containerd
