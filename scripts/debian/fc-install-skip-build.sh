@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 cd ~
 
 # Download kernel
@@ -68,7 +70,7 @@ if ! $(sudo dmsetup reload "${POOL}" --table "${THINP_TABLE}"); then
 fi
 
 # assuming this repo has been cloned into the home dir
-cd firecracker-containerd-experiment
+cd ~/firecracker-containerd-experiment
 
 sudo cp bin/fire* /usr/local/bin
 sudo cp bin/rootfs.img /var/lib/firecracker-containerd/runtime/default-rootfs.img
