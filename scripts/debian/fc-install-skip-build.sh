@@ -77,6 +77,10 @@ sudo cp bin/*fire* /usr/local/bin
 sudo cp bin/rootfs.img /var/lib/firecracker-containerd/runtime/default-rootfs.img
 sudo cp ~/hello-vmlinux.bin /var/lib/firecracker-containerd/runtime/default-vmlinux.bin
 sudo mkdir -p /etc/containerd
+
+sudo mkdir -p /etc/cni/conf.d
+sudo cp conf/fcnet.conflist /etc/cni/conf.d/
+
 sudo tee /etc/containerd/firecracker-runtime.json <<EOF
 {
   "firecracker_binary_path": "/usr/local/bin/firecracker",
