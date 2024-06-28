@@ -81,6 +81,9 @@ sudo mkdir -p /etc/containerd
 sudo mkdir -p /etc/cni/conf.d
 sudo cp conf/fcnet.conflist /etc/cni/conf.d/
 
+sudo mkdir -p /opt/cni/bin
+sudo cp opt/cni/bin/* /opt/cni/bin
+
 sudo tee /etc/containerd/firecracker-runtime.json <<EOF
 {
   "firecracker_binary_path": "/usr/local/bin/firecracker",
