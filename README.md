@@ -11,6 +11,7 @@ Running both Ubuntu 22.04 (Jammy Jellyfish) from a live USB disk and Debian 12 (
 
 <!-- MarkdownTOC autolink="true" -->
 
+- [Debian 12 \(live USB\) - skip build](#debian-12-live-usb-skip-build)
 - [Debian 11 \(live USB\)](#debian-11-live-usb)
 - [Debian 12 \(live USB\)](#debian-12-live-usb)
 - [Debian \(in VirtualBox\)](#debian-in-virtualbox)
@@ -21,6 +22,43 @@ Running both Ubuntu 22.04 (Jammy Jellyfish) from a live USB disk and Debian 12 (
 - [References](#references)
 
 <!-- /MarkdownTOC -->
+
+### Debian 12 (live USB) - skip build
+
+1. `sudo apt update`
+1. `git clone https://github.com/davidkuster/firecracker-containerd-experiment`
+1. `./scripts/debian/fc-setup.sh` 
+1. `./scripts/debian/fc-install-skip-build.sh`
+1. `sudo firecracker-containerd --config /etc/firecracker-containerd/config.toml`
+1. Open new tab, then `su - $(whoami)` and `groups` - ensure `docker` is in the list 
+1. In new tab:
+    ```bash
+    sudo firecracker-ctr --address /run/firecracker-containerd/containerd.sock \
+    image pull \
+    --snapshotter devmapper \
+    docker.io/library/debian:latest
+    ```
+1. Again in new tab:
+    ```bash
+    sudo firecracker-ctr --address /run/firecracker-containerd/containerd.sock \
+    run \
+    --snapshotter devmapper \
+    --runtime aws.firecracker \
+    --rm --tty --net-host \
+    docker.io/library/debian:latest \
+    test
+    ```
+1. In the logs of the first tab where `firecracker-containerd` is running, it has these errors:
+    ```bash
+    DEBU[2024-07-17T03:40:30.735327018Z]                                               attempt=194 error="temporary vsock dial failure: vsock ack message failure: failed to read \"OK <port>\" within 1s: EOF" runtime=aws.firecracker vmID=3b1c16eb-9dc6-46ac-903c-7db5107d8b2c
+    DEBU[2024-07-17T03:40:30.805937712Z] sending signal 9 to 6793                      jailer=noop runtime=aws.firecracker vmID=3b1c16eb-9dc6-46ac-903c-7db5107d8b2c
+    ERRO[2024-07-17T03:40:30.806149695Z] failed to create VM                           error="failed to dial the VM over vsock: context deadline exceeded" runtime=aws.firecracker vmID=3b1c16eb-9dc6-46ac-903c-7db5107d8b2c
+    DEBU[2024-07-17T03:40:30.806665716Z] stopVMM(): sending sigterm to firecracker     runtime=aws.firecracker
+    ERRO[2024-07-17T03:40:30.807201288Z] shim CreateVM returned error                  error="rpc error: code = DeadlineExceeded desc = VM \"3b1c16eb-9dc6-46ac-903c-7db5107d8b2c\" didn't start within 20s: failed to dial the VM over vsock: context deadline exceeded"
+    ERRO[2024-07-17T03:40:30.810482731Z] copy shim log                                 error="read /proc/self/fd/12: file already closed" namespace=default
+    DEBU[2024-07-17T03:40:30.810779988Z] shim has been terminated                      error="signal: killed" vmID=3b1c16eb-9dc6-46ac-903c-7db5107d8b2c
+    ```
+1. See full log output in [logs/fc.log](logs/fc.log)   
 
 ### Debian 11 (live USB)
 
