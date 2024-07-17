@@ -58,7 +58,7 @@ Running both Ubuntu 22.04 (Jammy Jellyfish) from a live USB disk and Debian 12 (
     ERRO[2024-07-17T03:40:30.810482731Z] copy shim log                                 error="read /proc/self/fd/12: file already closed" namespace=default
     DEBU[2024-07-17T03:40:30.810779988Z] shim has been terminated                      error="signal: killed" vmID=3b1c16eb-9dc6-46ac-903c-7db5107d8b2c
     ```
-1. See full log output in [logs/fc.log](logs/fc.log)   
+1. See full log output in [logs/fc.log](logs/fc.log) (running above command with `> logs/fc.log 2>&1`)   
 
 ### Debian 11 (live USB)
 
