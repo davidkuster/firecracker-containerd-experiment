@@ -11,7 +11,7 @@ Running both Ubuntu 22.04 (Jammy Jellyfish) from a live USB disk and Debian 12 (
 
 <!-- MarkdownTOC autolink="true" -->
 
-- [Debian 12 \(live USB\) - skip build](#debian-12-live-usb-skip-build)
+- [Debian 12 \(live USB\) - skip build](#debian-12-live-usb---skip-build)
 - [Debian 11 \(live USB\)](#debian-11-live-usb)
 - [Debian 12 \(live USB\)](#debian-12-live-usb)
 - [Debian \(in VirtualBox\)](#debian-in-virtualbox)
