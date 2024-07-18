@@ -9,4 +9,5 @@ Stepping back from containerd and trying just Firecracker. Following the steps [
 3. `scripts/1.sh`
 4. `scripts/2.sh`
 5. `scripts/3.sh`
+6. `scripts/4.sh`
 
