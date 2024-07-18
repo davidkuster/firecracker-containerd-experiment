@@ -4,8 +4,9 @@ Stepping back from containerd and trying just Firecracker. Following the steps [
 
 ## Debian 12
 
-1. `sudo apt install wget`
-2. `scripts/1.sh`
-3. `scripts/2.sh`
-4. `scripts/3.sh`
+1. `sudo apt update`
+2. `sudo apt install wget iptables`
+3. `scripts/1.sh`
+4. `scripts/2.sh`
+5. `scripts/3.sh`
 
